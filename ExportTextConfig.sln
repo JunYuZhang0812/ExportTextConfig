@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.33530.505
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExportTextConfig", "ExportTextConfig\ExportTextConfig.csproj", "{6CB3FC16-EEAA-44EB-9BCC-0C260A276E1C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6CB3FC16-EEAA-44EB-9BCC-0C260A276E1C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6CB3FC16-EEAA-44EB-9BCC-0C260A276E1C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6CB3FC16-EEAA-44EB-9BCC-0C260A276E1C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6CB3FC16-EEAA-44EB-9BCC-0C260A276E1C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {59BBF5CA-2935-48B2-95DF-AB7CDA81482C}
+	EndGlobalSection
+EndGlobal

@@ -37,12 +37,49 @@ namespace ExportTextConfig
         {
             Logic.SourceFilePath = m_srcFilePath.Text;
         }
-
+        private void m_srcFilePath_DragEnter(object sender, DragEventArgs e)
+        {
+            // 对文件拖拽事件做处理 
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+                e.Effect = DragDropEffects.Link;
+            else
+                e.Effect = DragDropEffects.None;
+        }
+        private void m_srcFilePath_DragDrop(object sender, DragEventArgs e)
+        {
+            var filePath = (string[])e.Data.GetData(DataFormats.FileDrop);
+            if (filePath.Length > 0)
+            {
+                if( Logic.IsFileMode )
+                {
+                    m_srcFilePath.Text = filePath[0];
+                }
+                else
+                {
+                    m_srcFilePath.Text = Path.GetDirectoryName( filePath[0] );
+                }
+            }
+        }
         private void m_textReplaceText_TextChanged(object sender, EventArgs e)
         {
             Logic.ReplaceFilePath = m_textReplaceText.Text;
         }
-
+        private void m_textReplaceText_DragEnter(object sender, DragEventArgs e)
+        {
+            // 对文件拖拽事件做处理 
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+                e.Effect = DragDropEffects.Link;
+            else
+                e.Effect = DragDropEffects.None;
+        }
+        private void m_textReplaceText_DragDrop(object sender, DragEventArgs e)
+        {
+            var filePath = (string[])e.Data.GetData(DataFormats.FileDrop);
+            if (filePath.Length > 0)
+            {
+                m_textReplaceText.Text = filePath[0];
+            }
+        }
         private void m_btnSelectSrcFile_Click(object sender, EventArgs e)
         {
             if (Logic.IsFileMode)

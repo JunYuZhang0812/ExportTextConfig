@@ -52,11 +52,14 @@
             // 
             // m_srcFilePath
             // 
+            this.m_srcFilePath.AllowDrop = true;
             this.m_srcFilePath.Location = new System.Drawing.Point(98, 34);
             this.m_srcFilePath.Name = "m_srcFilePath";
             this.m_srcFilePath.Size = new System.Drawing.Size(335, 21);
             this.m_srcFilePath.TabIndex = 1;
             this.m_srcFilePath.TextChanged += new System.EventHandler(this.m_srcFilePath_TextChanged);
+            this.m_srcFilePath.DragEnter += new System.Windows.Forms.DragEventHandler(this.m_srcFilePath_DragEnter);
+            this.m_srcFilePath.DragDrop += new System.Windows.Forms.DragEventHandler(this.m_srcFilePath_DragDrop);
             // 
             // m_btnSelectSrcFile
             // 
@@ -99,11 +102,14 @@
             // 
             // m_textReplaceText
             // 
+            this.m_textReplaceText.AllowDrop = true;
             this.m_textReplaceText.Location = new System.Drawing.Point(98, 61);
             this.m_textReplaceText.Name = "m_textReplaceText";
             this.m_textReplaceText.Size = new System.Drawing.Size(335, 21);
             this.m_textReplaceText.TabIndex = 6;
             this.m_textReplaceText.TextChanged += new System.EventHandler(this.m_textReplaceText_TextChanged);
+            this.m_textReplaceText.DragEnter += new System.Windows.Forms.DragEventHandler(this.m_textReplaceText_DragEnter);
+            this.m_textReplaceText.DragDrop += new System.Windows.Forms.DragEventHandler(this.m_textReplaceText_DragDrop);
             // 
             // m_btnSelectReplaceFile
             // 

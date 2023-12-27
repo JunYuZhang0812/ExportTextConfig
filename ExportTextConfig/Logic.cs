@@ -123,6 +123,7 @@ public class Logic
         m_errorList.Clear();
         InitReplaceStrDic();
         if (m_replaceStrDic.Count <= 0) return;
+        DeleteCopy();
         for (int i = 0; i < pathList.Count; i++)
         {
             string str = pathList[i];
@@ -136,6 +137,7 @@ public class Logic
     }
     private static void InitReplaceStrDic()
     {
+        bool error = false;
         m_replaceStrDic.Clear();
         var excelPath = ReplaceFilePath;
         if (!File.Exists(excelPath))
@@ -164,6 +166,11 @@ public class Logic
                         IRow currentRow = sheet.GetRow(rowIndex);
                         if (currentRow != null)
                         {
+                            var cell0 = currentRow.GetCell(0);
+                            if(cell0 == null || string.IsNullOrEmpty(cell0.StringCellValue))
+                            {
+                                continue;
+                            }
                             var strValue = currentRow.GetCell(1).StringCellValue;
                             var textId = currentRow.GetCell(0).StringCellValue;
                             if (!m_replaceStrDic.ContainsKey(strValue))
@@ -172,6 +179,7 @@ public class Logic
                             }
                             else
                             {
+                                error = true;
                                 MessageBox.Show("文本id重复。" + textId);
                             }
                         }
@@ -187,10 +195,33 @@ public class Logic
             }
             file.Close();
         }
+        if( error )
+        {
+            m_replaceStrDic.Clear();
+        }
+    }
+    private static void DeleteCopy()
+    {
+        var files = Directory.GetFiles(CopyPath);
+        for (int i = 0; i < files.Length; i++)
+        {
+            File.Delete(files[i]);
+        }
+    }
+    private static void CreateCopy(string path)
+    {
+        var fileName = Path.GetFileName(path);
+        var newPath = Path.Combine(CopyPath, fileName);
+        if( File.Exists(newPath))
+        {
+            File.Delete(newPath);
+        }
+        File.Copy(path, newPath);
     }
     private static void ReplaceFile(string path)
     {
         List<string> lineList = new List<string>();
+        bool hasChange = false;
         var rs = new StreamReader(path);
         try
         {
@@ -206,6 +237,7 @@ public class Logic
                         var str = match.Groups[1].Value;
                         if (m_replaceStrDic.ContainsKey(str))
                         {
+                            hasChange = true;
                             var reg = new Regex("\"@(" + ExcapeCharacterTransform( str ) + ")\"");
                             line = reg.Replace(line, "\""+m_replaceStrDic[str] + "\"--[[$1]]");
                         }
@@ -222,19 +254,30 @@ public class Logic
         {
             rs.Close();
         }
-        var sm = new FileStream(path, FileMode.Open, FileAccess.Write, FileShare.Write);
-        var fs = new StreamWriter(sm);
-        try
+        if( hasChange )
         {
-            for (int i = 0; i < lineList.Count; i++)
+            CreateCopy(path);
+            var sm = new FileStream(path, FileMode.Open, FileAccess.Write, FileShare.Write);
+            var fs = new StreamWriter(sm);
+            try
             {
-                fs.WriteLine(lineList[i]);
+                for (int i = 0; i < lineList.Count; i++)
+                {
+                    if (i == lineList.Count - 1)
+                    {
+                        fs.Write(lineList[i]);
+                    }
+                    else
+                    {
+                        fs.Write(lineList[i] + Environment.NewLine);
+                    }
+                }
             }
-        }
-        finally
-        {
-            fs.Close();
-            sm.Close();
+            finally
+            {
+                fs.Close();
+                sm.Close();
+            }
         }
     }
 
@@ -261,6 +304,7 @@ public class Logic
             fs.Close();
             sm.Close();
         }
+        Process.Start(path);
     }
 
     private static Dictionary<char, string> ExcapeCharacter = new Dictionary<char, string>
@@ -278,6 +322,8 @@ public class Logic
         ['^'] = @"\^",
         ['|'] = @"\|",
         ['?'] = @"\?",
+        ['('] = @"\(",
+        [')'] = @"\)",
     };
     public static string ExcapeCharacterTransform(string str)
     {
@@ -320,6 +366,18 @@ public class Logic
                 }
             }
             return _APPDataPath;
+        }
+    }
+    public static string CopyPath
+    {
+        get
+        {
+            var path = Path.Combine(APPDataPath, "Copy");
+            if( !Directory.Exists(path) )
+            {
+                Directory.CreateDirectory(path);
+            }
+            return path;
         }
     }
     public static string GetEnumDescription<T>(T obj)
